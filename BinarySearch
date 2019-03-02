@@ -1,0 +1,92 @@
+# Binary Search
+# 744. Find Smallest Letter Greater Than Target
+class Solution:
+    def nextGreatestLetter(self, letters: List[str], target: str) -> str:
+        dic = {'a': 1, 'b':2, 'c':3, 'd':4, 'e':5, 'f':6, 'g':7, 'h':8,
+              'i': 9, 'j':10, 'k':11, 'l':12, 'm':13, 'n':14, 'o':15, 'p':16,
+              'q': 17, 'r':18, 's':19, 't':20, 'u':21, 'v':22, 'w':23, 'x':24,
+              'y': 25, 'z':26} 
+        
+        left, right = 0, len(letters)-1
+        ntarget = dic[target]
+
+        if dic[letters[-1]] <= ntarget:            
+            return letters[0]    
+        else:
+            while left < right:
+                mid = (left+right)//2
+                if dic[letters[mid]] <= ntarget:
+                    left = mid + 1
+                else:
+                    right = mid
+
+        return letters[left]
+    
+# 475. Heaters                
+class Solution:
+    def findRadius(self, houses: List[int], heaters: List[int]) -> int:
+        heaters.sort()
+        dis = 0
+        
+        for house in houses:
+            left, right = 0, len(heaters)-1
+            if left == right:
+                dis = max(dis, abs(heaters[0] - house))
+            
+            while left < right:
+                mid = (left+right)//2
+                
+                if heaters[mid] <= house:
+                    left = mid+1
+                else:
+                    right = mid
+            
+            dis = max(dis, min(abs(heaters[left] - house), abs(house - heaters[left-1])))
+            
+        return dis
+
+# 162. Find Peak Element
+class Solution:
+    def findPeakElement(self, nums: List[int]) -> int:
+        
+        if not nums:
+            return 0
+        left, right = 0, len(nums)-1        
+        while left + 1 < right:
+            mid = int((left+right)/2)  
+
+            if nums[mid-1] < nums[mid] and nums[mid] > nums[mid+1]:
+                return mid
+            
+            elif nums[mid-1] > nums[mid]:
+                right = mid
+            elif nums[mid-1] < nums[mid]:
+                left = mid  
+                
+        if nums[left] > nums[right]:
+            return left
+        else:
+            return right            
+            
+# 719. Find K-th Smallest Pair Distance
+class Solution:
+    def smallestDistancePair(self, nums: List[int], k: int) -> int:
+        nums.sort()
+        left, right = 0, nums[-1] - nums[0]
+        
+        while left < right:
+            mid = (left+right)//2 
+            count = 0
+            j = 0
+            for i in range(0,len(nums)-1):
+                while j < len(nums) and abs(nums[j]-nums[i]) <= mid:       
+                    j += 1
+                count += j - i - 1
+            print(count, left, mid, right)
+            if count < k:
+                left = mid + 1
+            else:
+                right = mid
+                
+        return left
+        
